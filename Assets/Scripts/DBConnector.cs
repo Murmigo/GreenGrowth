@@ -5,26 +5,22 @@ using System.Data.SQLite;
 
 public class DBConnector : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         Debug.Log(Application.dataPath);
         //string URL = Application.dataPath + "\BBDD\greengrowth.db;Version=3;";
-       SQLiteConnection connection = new SQLiteConnection(@"Data Source= " + Application.dataPath + "\\BBDD\\greengrowth.db;Version=3;"); //Habrá que cambiar la ruta en un futuro cuando esté metida en unity
+        SQLiteConnection connection = new SQLiteConnection(@"Data Source= " + Application.dataPath + "\\BBDD\\greengrowth.db;Version=3;");
         connection.Open();
-
         SQLiteCommand command = connection.CreateCommand();
         command.CommandType = System.Data.CommandType.Text;
         command.CommandText =
                             "CREATE TABLE IF NOT EXISTS 'Plantas' ( " +
-                          "  'Id' INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                          "  'Id' INTEGER PRIMARY KEY, " +
                           "  'Tipo' TEXT NOT NULL, " +
                           "  'Nombre' TEXT NOT NULL, " +
                           "  'Crecimiento_Fase1' INTEGER NOT NULL, " +
                           "  'Crecimiento_Fase2' INTEGER, " +
                           "  'Crecimiento_Fase3' INTEGER, " +
-                          "  'Numero_Objetivo_1' INTEGER, " +
-                          "  'Tiempo' INTEGER NOT NULL, " +
                           "  'Agua_min' INTEGER NOT NULL, " +
                           "  'Agua_MAX' INTEGER NOT NULL, " +
                           "  'Luz_min' INTEGER NOT NULL, " +
@@ -48,6 +44,7 @@ public class DBConnector : MonoBehaviour
                           ");";
 
         command.ExecuteNonQuery();
+        command.ExecuteNonQuery();
         connection.Close();
 
         /* WOn't work in STANDALONE??
@@ -56,5 +53,10 @@ public class DBConnector : MonoBehaviour
          So, to get your application working correctly, create the YourAppName/YourAppame_Data/Mono directory and copy the SQLite.Interop.dll file
          from the YourAppName/YourAppName_Data/Plugins directory into it
          */
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
+        
     }
 }
