@@ -32,7 +32,7 @@ public class Planta
 {
     private int _id;
     private string _nombre;
-    private List<int> _crecimiento;
+    private List<int> _crecimiento = new List<int>();
     private int _aguaMin;
     private int _luzMin;
     private int _tempMin;

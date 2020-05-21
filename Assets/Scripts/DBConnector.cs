@@ -9,7 +9,7 @@ public class DBConnector : MonoBehaviour
     {
         Debug.Log(Application.dataPath);
         //string URL = Application.dataPath + "\BBDD\greengrowth.db;Version=3;";
-        SQLiteConnection connection = new SQLiteConnection(@"Data Source= " + Application.dataPath + "\\BBDD\\greengrowth.db;Version=3;");
+        SQLiteConnection connection = new SQLiteConnection(@"Data Source= " + Application.dataPath + "\\Plugins\\greengrowth.db;Version=3;");
         connection.Open();
         SQLiteCommand command = connection.CreateCommand();
         command.CommandType = System.Data.CommandType.Text;

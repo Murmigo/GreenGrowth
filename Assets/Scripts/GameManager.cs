@@ -7,6 +7,17 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    private static GameManager instance = null;
+
+    // Game Instance Singleton
+    public static GameManager Instance
+    {
+        get
+        {
+            return instance;
+        }
+    }
+
     public int day = 1;
     public int month = 1;
     public int year = 0;
@@ -14,11 +25,13 @@ public class GameManager : MonoBehaviour
     public Text text;
 
     private bool ejecutandoDia = false;
+
+    public List<Terreno> listaTerreno;
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(pasarDia());
-        Debug.Log("Hoy es fecha: " + day + "/" + month + "/" + year);
+        //Debug.Log("Hoy es fecha: " + day + "/" + month + "/" + year);
         text.text = "Fecha: " + day + "/" + month + "/" + year;
     }
 
@@ -30,6 +43,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(pasarDia());
 
         }
+        text.text = "Fecha: " + day + "/" + month + "/" + year;
     }
 
     private void FixedUpdate()
@@ -38,7 +52,7 @@ public class GameManager : MonoBehaviour
         {
             actualizarFecha();
         }
-        text.text = "Fecha: " + day + "/" + month + "/" + year;
+        
     }
 
     private IEnumerator pasarDia()
@@ -54,12 +68,20 @@ public class GameManager : MonoBehaviour
 
     private void actualizarFecha()
     {
+            
         month++;
+
         day = 1;
         if (month > 12)
         {
             year++;
             month = 1;
+        }
+
+        for (int i = 0; i < listaTerreno.Count; i++)
+        {
+            if(listaTerreno[i].terreno_ocupado)
+                listaTerreno[i].GetComponent<Terreno>().restarCapacidades();
         }
     }
 
@@ -67,11 +89,11 @@ public class GameManager : MonoBehaviour
     {
         Planta pt = new Planta();
         SQLiteConnection connection;
-        connection = new SQLiteConnection(@"Data Source= " + Application.dataPath + "\\BBDD\\greengrowth.db;Version=3;");
+        connection = new SQLiteConnection(@"Data Source= " + Application.dataPath + "\\Plugins\\greengrowth.db;Version=3;");
 
         connection.Open();
         SQLiteCommand command = connection.CreateCommand();
-        string sqlQuery = "Select * FROM Plantas WHERE nombre='" + nombre + "'";
+        string sqlQuery = "Select * FROM Plantas WHERE Nombre = '"  + nombre + "';";
         command.CommandText = sqlQuery;
         command.CommandType = System.Data.CommandType.Text;
 
@@ -80,13 +102,16 @@ public class GameManager : MonoBehaviour
         {
             pt.Id = reader.GetInt32(0);
             pt.Nombre = reader.GetString(2);
+
             pt.Crecimiento.Add(reader.GetInt32(3));
-            /*
-             * if(reader.GetData(4) != null)
+            if (reader.GetValue(4).GetType().Equals(typeof(System.Int64)))
+            {
                 pt.Crecimiento.Add(reader.GetInt32(4));
-            if (reader.GetData(5) != null)
-                pt.Crecimiento.Add(reader.GetInt32(5));
-            */
+
+                if (reader.GetValue(5).GetType().Equals(typeof(System.Int64)))
+                    pt.Crecimiento.Add(reader.GetInt32(5));
+            }
+
             pt.AguaMin = reader.GetInt32(6);
             pt.AguaMax = reader.GetInt32(7);
             pt.LuzMin = reader.GetInt32(8);

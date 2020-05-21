@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Terreno : MonoBehaviour
 {
@@ -19,39 +20,44 @@ public class Terreno : MonoBehaviour
     public int Abono { get => _abono; set => _abono = value; }
 
     //Si el estado es falso, la planta se marchita, si es true la planta no lo hace y crece
-    private int marchito = 10;
+    private const int marchito = 10;
     public bool estadoOk = false;
     private int contadorEstado = 0;
 
     private int edad = 0;
     private int mesActual = 0;
     private int añoDePlantacion = 0;
+    private int mesDePlantacion = 0;
+
+    public bool maduracion = false;
+
     //Variables de uso del Script
     public GameManager gm;
-    private Planta plantacion = null;
+    public Planta plantacion = null;
     private bool btn_plantaPulsada;
-    private bool terreno_ocupado = false;
-    private GameObject instanciaActual = null;
+    public bool terreno_ocupado = false;
+    public GameObject instanciaActual = null;
     public GameObject Temporal;
+    public Text output;
    
     // Update is called once per frame
     void Update()
     {
         if (instanciaActual != null)
         {
-            if (Agua < plantacion.AguaMin || Agua > plantacion.AguaMax)
+            if (Agua <= plantacion.AguaMin || Agua >= plantacion.AguaMax)
             {
                 estadoOk = false;
             }
-            else if (Luz < plantacion.LuzMin || Luz > plantacion.LuzMax)
+            else if (Luz <= plantacion.LuzMin || Luz >= plantacion.LuzMax)
             {
                 estadoOk = false;
             }
-            else if (Temp < plantacion.TempMin || Temp > plantacion.TempMax)
+            else if (Temp <= plantacion.TempMin || Temp >= plantacion.TempMax)
             {
                 estadoOk = false;
             }
-            else if (Abono < plantacion.AbonoMin || Abono > plantacion.AbonoMax)
+            else if (Abono <= plantacion.AbonoMin || Abono >= plantacion.AbonoMax)
             {
                 estadoOk = false;
             }
@@ -60,8 +66,10 @@ public class Terreno : MonoBehaviour
                 estadoOk = true;
             }
 
-            edad = gm.year - añoDePlantacion;
-            
+            if (gm.month == mesDePlantacion)
+                edad = gm.year - añoDePlantacion;
+
+            instanciaActual.GetComponent<Animator>().SetBool("estadoOk", estadoOk);
 
             if (!estadoOk)
             {
@@ -73,13 +81,18 @@ public class Terreno : MonoBehaviour
             }
             else
             {
+                if(edad >= plantacion.Crecimiento[2])
+                    maduracion = true;
+
                 
+                instanciaActual.GetComponent<Animator>().SetInteger("Edad", edad);
             }
 
             if (contadorEstado > marchito)
             {
                 Eliminar();
-                Debug.Log("La planta murió");
+                output.text = "La planta murió";
+                //Debug.Log("La planta murió");
             }
         }
     }
@@ -91,26 +104,30 @@ public class Terreno : MonoBehaviour
             if (gm.GetComponent<Botones>().AguaActive)
             {
                 Agua += 5;
-                Debug.Log(Agua);
+                output.text = "Agua: " + Agua; 
+                //Debug.Log(Agua);
                 gm.GetComponent<Botones>().mostrarPaneles();
-                gm.GetComponent<Botones>().AguaPulsado();
+                //gm.GetComponent<Botones>().AguaPulsado();
             }
             else if (gm.GetComponent<Botones>().LuzActive)
             {
                 Luz += 5;
-                Debug.Log(Luz);
+                output.text = "Luz: " + Luz;
+                //Debug.Log(Luz);
                 gm.GetComponent<Botones>().mostrarPaneles();
             }
             else if (gm.GetComponent<Botones>().TempActive)
             {
                 Temp += 5;
-                Debug.Log(Temp);
+                output.text = "Temperatura: " + Temp;
+                //Debug.Log(Temp);
                 gm.GetComponent<Botones>().mostrarPaneles();
             }
             else if (gm.GetComponent<Botones>().AbonoActive)
             {
                 Abono += 5;
-                Debug.Log(Abono);
+                output.text = "Abono: " + Abono;
+                //Debug.Log(Abono);
                 gm.GetComponent<Botones>().mostrarPaneles();
             }
 
@@ -120,6 +137,9 @@ public class Terreno : MonoBehaviour
                 Eliminar();
                 gm.GetComponent<Botones>().mostrarPaneles();
             }
+
+            //Mision
+
         }
         else {
 
@@ -127,6 +147,7 @@ public class Terreno : MonoBehaviour
             {
                 Instanciar();
                 añoDePlantacion = gm.year;
+                mesDePlantacion = gm.month;
                 mesActual = gm.month;
             }
             if (gm.GetComponent<Botones>().AguaActive) {
@@ -145,6 +166,7 @@ public class Terreno : MonoBehaviour
         plantacion = gm.elegirPlanta(nombrePlanta);
         GameObject instanciaPlanta = (GameObject)Resources.Load("Prefabs/" + nombrePlanta, typeof(GameObject));
         instanciaActual = Instantiate(instanciaPlanta, this.transform.position, Quaternion.identity);
+        instanciaActual.transform.parent = this.gameObject.transform;
 
         terreno_ocupado = true;
 
@@ -157,15 +179,30 @@ public class Terreno : MonoBehaviour
         edad = 0;
     }
 
-    private void Eliminar()
+    public void Eliminar()
     {
             //Crear subrutina de animación para cuando la planta mueren
             plantacion = null;
+            maduracion = false;
             Destroy(instanciaActual.gameObject.gameObject);
             instanciaActual = null;
             terreno_ocupado = false;
+            añoDePlantacion = 0;
+            edad = 0;
 
-           
+    }
+
+    public void restarCapacidades()
+    {
+        int bajadaAgua = Random.Range(0, 9);
+        int bajadaTemp = Random.Range(0, 9);
+        int bajadaLuz = Random.Range(0, 9);
+        int bajadaAbono = Random.Range(0, 9);
+
+        Agua -= bajadaAgua;
+        Temp -= bajadaTemp;
+        Luz -= bajadaLuz;
+        Abono -= bajadaAbono;
 
     }
 }

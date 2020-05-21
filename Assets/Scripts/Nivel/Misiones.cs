@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using UnityEngine;
@@ -11,6 +10,8 @@ public class Misiones : MonoBehaviour
     public bool cogerMision = true;
     private SQLiteConnection connection;
     private List<Mision> listaMisiones;
+    public GameObject gm;
+
 
     public GameObject m1;
     public GameObject m2;
@@ -20,7 +21,7 @@ public class Misiones : MonoBehaviour
     void Start()
     {
         listaMisiones = new List<Mision>();
-        connection = new SQLiteConnection(@"Data Source= " + Application.dataPath + "\\BBDD\\greengrowth.db;Version=3;");
+        connection = new SQLiteConnection(@"Data Source= " + Application.dataPath + "\\Plugins\\greengrowth.db");
 
         connection.Open();
         SQLiteCommand command = connection.CreateCommand();
@@ -34,7 +35,6 @@ public class Misiones : MonoBehaviour
         {
             //count = reader.FieldCount;
             count = reader.GetInt32(0);
-           Debug.Log(count);
         }
         reader.Close();
         reader = null;
@@ -68,10 +68,10 @@ public class Misiones : MonoBehaviour
                 }
             } while (!rnd_Ok);
 
-                Debug.Log("el random es : " + rnd);
+                //Debug.Log("el random es : " + rnd);
 
-            connection = new SQLiteConnection(@"Data Source= " + Application.dataPath + "\\BBDD\\greengrowth.db;Version=3;");
-
+            connection = new SQLiteConnection(@"Data Source= " + Application.dataPath + "\\Plugins\\greengrowth.db");
+            
             connection.Open();
             SQLiteCommand command = connection.CreateCommand();
             string sqlQuery = "Select * FROM Misiones WHERE id = " + rnd;
@@ -89,12 +89,15 @@ public class Misiones : MonoBehaviour
                 int valueNumObj1 = reader.GetInt32(4);
                 int valueObj2 = -1;
                 int valueNumObj2 = 0;
+
+
                 /* Hay que comprobar como pasar el campo a null, si no poner de default -1 y 0 a la base de datos */
-                /*if (reader.GetValue(5) != null)
+                if (reader.GetValue(5).GetType().Equals(typeof(System.Int64)))
                 {
+                   // Debug.Log("Hola mundo");
                     valueObj2 = reader.GetInt32(5);
                     valueNumObj2 = reader.GetInt32(6);
-                }*/
+                }
                 int valueTiempo = reader.GetInt32(7);
 
 
@@ -109,8 +112,6 @@ public class Misiones : MonoBehaviour
                     setMisionText(listaMisiones[2], m3);
                 }
             }
-
-
             reader.Close();
             reader = null;
             command.Dispose();
@@ -123,6 +124,68 @@ public class Misiones : MonoBehaviour
     {
         misionText.GetComponent<Text>().text = m.Descripcion;
     }
+
+    public void EntregarMision(int pos)
+    {
+        Mision m = listaMisiones[pos];
+        List<Terreno> terrenos = gm.GetComponent<GameManager>().listaTerreno;
+        List<Terreno> plantas = new List<Terreno>();
+        int countObj1 = 0;
+        int countObj2 = -1;
+
+        for (int i = 0; i< terrenos.Count;i++)
+        {
+            if (terrenos[i].terreno_ocupado)
+            {
+                if (terrenos[i].plantacion.Id == m.Obj1 && terrenos[i].maduracion)
+                {
+                    if (countObj1 < m.NumObj1)
+                    {
+                        countObj1++;
+                        plantas.Add(terrenos[i]);
+                    }
+                }
+            
+
+                if (m.Obj2 != -1)
+                {
+                    if(countObj2 == -1)
+                        countObj2 = 0;
+                    if (terrenos[i].plantacion.Id == m.Obj2 && terrenos[i].maduracion)
+                    {
+                        if (countObj2 < m.NumObj2)
+                        {
+                            countObj2++;
+                            plantas.Add(terrenos[i]);
+                        }
+                    }
+
+                }
+            }
+        }
+
+        if (countObj1 == m.NumObj1)
+        {
+            if (countObj2 == m.NumObj2 || countObj2 == -1)
+            {
+                for (int i = 0; i < plantas.Count; i++)
+                {
+                    plantas[i].Eliminar();
+                    Debug.Log("Entregado");
+
+                }
+                listaMisiones.RemoveAt(pos);
+                cogerMision = true;
+            }
+        }
+    }
+
+    private void buscarPlanta(int mision)
+    {
+    }
+
+
+
 }
 
 
