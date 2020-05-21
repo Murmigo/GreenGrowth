@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
     {
         Planta pt = new Planta();
         SQLiteConnection connection;
-        connection = new SQLiteConnection(@"Data Source= " + Application.dataPath + "\\Plugins\\greengrowth.db;Version=3;");
+        connection = new SQLiteConnection(@"Data Source= " + Application.dataPath + "\\Plugins\\greengrowth.db");
 
         connection.Open();
         SQLiteCommand command = connection.CreateCommand();
