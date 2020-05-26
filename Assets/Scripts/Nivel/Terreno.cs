@@ -104,7 +104,7 @@ public class Terreno : MonoBehaviour
             if (gm.GetComponent<Botones>().AguaActive)
             {
                 Agua += 5;
-                output.text = "Agua: " + Agua; 
+                output.text = "Agua: " + Agua + "\nLuz: " + Luz + "\nAbono: " + Abono + "\nTemperatura: " + Temp; 
                 //Debug.Log(Agua);
                 gm.GetComponent<Botones>().mostrarPaneles();
                 //gm.GetComponent<Botones>().AguaPulsado();
@@ -112,21 +112,21 @@ public class Terreno : MonoBehaviour
             else if (gm.GetComponent<Botones>().LuzActive)
             {
                 Luz += 5;
-                output.text = "Luz: " + Luz;
+                output.text = "Agua: " + Agua + "\nLuz: " + Luz + "\nAbono: " + Abono + "\nTemperatura: " + Temp;
                 //Debug.Log(Luz);
                 gm.GetComponent<Botones>().mostrarPaneles();
             }
             else if (gm.GetComponent<Botones>().TempActive)
             {
                 Temp += 5;
-                output.text = "Temperatura: " + Temp;
+                output.text = "Agua: " + Agua + "\nLuz: " + Luz + "\nAbono: " + Abono + "\nTemperatura: " + Temp;
                 //Debug.Log(Temp);
                 gm.GetComponent<Botones>().mostrarPaneles();
             }
             else if (gm.GetComponent<Botones>().AbonoActive)
             {
                 Abono += 5;
-                output.text = "Abono: " + Abono;
+                output.text = "Agua: " + Agua + "\nLuz: " + Luz + "\nAbono: " + Abono + "\nTemperatura: " + Temp;
                 //Debug.Log(Abono);
                 gm.GetComponent<Botones>().mostrarPaneles();
             }
@@ -175,7 +175,7 @@ public class Terreno : MonoBehaviour
             gm.GetComponent<Botones>().mostrarMisiones();
 
         gm.GetComponent<Botones>().activarDesactivarPlantaBoton();
-
+        contadorEstado = 0;
         edad = 0;
     }
 

@@ -1494,6 +1494,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonTexto: {fileID: 1534198074}
   Temporal: {fileID: 1624248412}
+  gm: {fileID: 329273427}
+  output: {fileID: 558957619}
 --- !u!114 &577026267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2568,6 +2570,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonTexto: {fileID: 574998640}
   Temporal: {fileID: 1624248412}
+  gm: {fileID: 329273427}
+  output: {fileID: 558957619}
 --- !u!1 &861802186
 GameObject:
   m_ObjectHideFlags: 0
@@ -4596,8 +4600,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.06422424, y: -15.378998}
-  m_SizeDelta: {x: -0.128479, y: 30}
+  m_AnchoredPosition: {x: -0.06422424, y: -40.70999}
+  m_SizeDelta: {x: -0.128479, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1336748038
 MonoBehaviour:
@@ -4816,6 +4820,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonTexto: {fileID: 1096021152}
   Temporal: {fileID: 1624248412}
+  gm: {fileID: 329273427}
+  output: {fileID: 558957619}
 --- !u!114 &1459115115
 MonoBehaviour:
   m_ObjectHideFlags: 0

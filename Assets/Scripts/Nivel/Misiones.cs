@@ -21,7 +21,7 @@ public class Misiones : MonoBehaviour
     void Start()
     {
         listaMisiones = new List<Mision>();
-        connection = new SQLiteConnection(@"Data Source= " + Application.dataPath + "\\Plugins\\greengrowth.db");
+        connection = new SQLiteConnection(@"Data Source= " + Application.dataPath + "\\StreamingAssets\\greengrowth.db");
 
         connection.Open();
         SQLiteCommand command = connection.CreateCommand();
@@ -70,7 +70,7 @@ public class Misiones : MonoBehaviour
 
                 //Debug.Log("el random es : " + rnd);
 
-            connection = new SQLiteConnection(@"Data Source= " + Application.dataPath + "\\Plugins\\greengrowth.db");
+            connection = new SQLiteConnection(@"Data Source= " + Application.dataPath + "\\StreamingAssets\\greengrowth.db");
             
             connection.Open();
             SQLiteCommand command = connection.CreateCommand();
