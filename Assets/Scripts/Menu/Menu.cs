@@ -5,8 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
+    public GameObject MenuPanel;
+    public GameObject CreditosPanel;
     public string escena = "Nivel";
-    public string creditos = "creditos";
 
     public void CambiaEscena(string str)
     {
@@ -16,5 +17,18 @@ public class Menu : MonoBehaviour
     public void Salir()
     {
         Application.Quit();
+    }
+
+    public void MostrarCreditos()
+    {
+        if (!CreditosPanel.activeSelf)
+        {
+            MenuPanel.SetActive(false);
+            CreditosPanel.SetActive(true);
+        }
+        else {
+            MenuPanel.SetActive(true);
+            CreditosPanel.SetActive(false);
+        }
     }
 }
