@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Terreno : MonoBehaviour
@@ -91,7 +92,7 @@ public class Terreno : MonoBehaviour
             if (contadorEstado > marchito)
             {
                 Eliminar();
-                output.text = "La planta murió";
+                output.text = "Tu planta murió";
                 //Debug.Log("La planta murió");
             }
         }
@@ -104,7 +105,7 @@ public class Terreno : MonoBehaviour
             if (gm.GetComponent<Botones>().AguaActive)
             {
                 Agua += 5;
-                output.text = "Agua: " + Agua + "\nLuz: " + Luz + "\nAbono: " + Abono + "\nTemperatura: " + Temp; 
+                output.text = "Agua: " + Agua + "\nLuz: " + Luz + "\nAbono: " + Abono + "\nTemperatura: " + Temp;
                 //Debug.Log(Agua);
                 gm.GetComponent<Botones>().mostrarPaneles();
                 //gm.GetComponent<Botones>().AguaPulsado();
@@ -128,6 +129,10 @@ public class Terreno : MonoBehaviour
                 Abono += 5;
                 output.text = "Agua: " + Agua + "\nLuz: " + Luz + "\nAbono: " + Abono + "\nTemperatura: " + Temp;
                 //Debug.Log(Abono);
+                gm.GetComponent<Botones>().mostrarPaneles();
+            }
+            else {
+                output.text = "Agua: " + Agua + "\nLuz: " + Luz + "\nAbono: " + Abono + "\nTemperatura: " + Temp;
                 gm.GetComponent<Botones>().mostrarPaneles();
             }
 
@@ -158,6 +163,7 @@ public class Terreno : MonoBehaviour
         }
           
     }
+
     private void Instanciar()
     {
         Debug.Log("Has clickado el terreno");
@@ -181,7 +187,7 @@ public class Terreno : MonoBehaviour
 
     public void Eliminar()
     {
-            //Crear subrutina de animación para cuando la planta mueren
+            //Crear subrutina de animación para cuando la planta muere
             plantacion = null;
             maduracion = false;
             Destroy(instanciaActual.gameObject.gameObject);
@@ -189,6 +195,10 @@ public class Terreno : MonoBehaviour
             terreno_ocupado = false;
             añoDePlantacion = 0;
             edad = 0;
+            Agua = 0;
+            Temp = 0;
+            Luz = 0;
+            Abono = 0;
 
     }
 

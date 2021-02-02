@@ -26,26 +26,25 @@ public class Botones_Plantas : MonoBehaviour, IPointerEnterHandler
     {
         string conversor = "";
 
-        if (0 >= num && num <= 20)
+        switch (num)
         {
-            conversor = "*";
-        } else if (20 > num && num <= 40)
-        {
-            conversor = "**";
-        }
-        else if (40 > num && num <= 60)
-        {
-            conversor = "***";
-        }
-        else if (60 > num && num <= 80)
-        {
-            conversor = "****";
-        }
-        else if (80 > num && num <= 100)
-        {
-            conversor = "*****";
-        }
+            case int n when (n <= 20):
+                conversor = "*";
+                break;
+            case int n when (n > 20 && n <= 40):
+                conversor = "**";
+                break;
+            case int n when (n > 40 && n <= 60):
+                conversor = "***";
+                break;
+            case int n when (n > 60 && n <= 80):
+                conversor = "****";
+                break;
+            case int n when (n > 80):
+                conversor = "*****";
+                break;
 
+        }
 
         return conversor;
     }
