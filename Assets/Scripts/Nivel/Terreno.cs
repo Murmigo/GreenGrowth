@@ -93,7 +93,7 @@ public class Terreno : MonoBehaviour
             {
                 Eliminar();
                 output.text = "Tu planta murió";
-                //Debug.Log("La planta murió");
+                Debug.Log("La planta murió");
             }
         }
     }
